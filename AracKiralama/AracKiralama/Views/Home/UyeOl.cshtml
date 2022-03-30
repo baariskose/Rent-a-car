@@ -1,0 +1,46 @@
+﻿@using AracKiralama.Models.Veritabani
+@{
+    ViewBag.Title = "UyeOl";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="form col-md-10 col-md-offset-8 col-sm-offset-6  col-sm-6 col-xs-8 col-xs-offset-4">
+        <div class="title"><h1>Üye Ol</h1></div>
+        <div class="content">
+            <form action="#">
+                <div class="user-details">
+                    <div class="input-box">
+                        
+                        <input type="text" placeholder="Ad" required>
+                    </div>
+                    <div class="input-box">
+                        
+                        <input type="text" placeholder="Soyad" required>
+                    </div>
+                    <div class="input-box">
+                       
+                        <input type="text" placeholder="TC no" required>
+                    </div>
+                    <div class="input-box">
+                        
+                        <input type="date" placeholder="Doğum tarihi" required>
+                    </div>
+                    <div class="input-box">
+                        
+                        <input type="text" placeholder="Şifre" required>
+                    </div>
+                    <div class="input-box">
+                     
+                        <input type="text" placeholder="Şifre onay" required>
+                    </div>
+                </div>
+
+                <div class="button">
+                    <input type="submit" value="Üye Ol">
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

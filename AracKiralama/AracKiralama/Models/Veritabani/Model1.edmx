@@ -1,0 +1,553 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AracKiralamaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="araçBilgisi">
+          <Key>
+            <PropertyRef Name="arac_ID" />
+          </Key>
+          <Property Name="arac_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="aracAdi" Type="varchar" MaxLength="50" />
+          <Property Name="aracModeli" Type="varchar" MaxLength="50" />
+          <Property Name="gerekenEhliyetYasi" Type="int" />
+          <Property Name="aracKM" Type="float" />
+          <Property Name="airbag" Type="bit" />
+          <Property Name="koltukSayisi" Type="int" />
+          <Property Name="günlükUcret" Type="float" />
+        </EntityType>
+        <EntityType Name="kiralama">
+          <Key>
+            <PropertyRef Name="kira_ID" />
+          </Key>
+          <Property Name="kira_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="arac_ID" Type="int" />
+          <Property Name="musteri_ID" Type="int" />
+          <Property Name="kiralanmaTarihi" Type="datetime" />
+          <Property Name="kiraUcret" Type="float" />
+          <Property Name="verilişKM" Type="float" />
+          <Property Name="sonKM" Type="float" />
+        </EntityType>
+        <EntityType Name="kullanıcı">
+          <Key>
+            <PropertyRef Name="kullanici_ID" />
+          </Key>
+          <Property Name="kullanici_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="arac_ID" Type="int" />
+          <Property Name="rezervasyon_ID" Type="int" />
+          <Property Name="kiralama_ID" Type="int" />
+          <Property Name="musteri_ID" Type="int" />
+        </EntityType>
+        <EntityType Name="müşteri">
+          <Key>
+            <PropertyRef Name="musteri_ID" />
+          </Key>
+          <Property Name="musteri_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="musteriAd" Type="varchar" MaxLength="50" />
+          <Property Name="musteriSoyad" Type="varchar" MaxLength="50" />
+          <Property Name="musteriTC" Type="int" />
+          <Property Name="musteriDogumTarihi" Type="date" />
+        </EntityType>
+        <EntityType Name="rezervasyon">
+          <Key>
+            <PropertyRef Name="rezervasyon_ID" />
+          </Key>
+          <Property Name="rezervasyon_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="arac_ID" Type="int" />
+          <Property Name="musteri_ID" Type="int" />
+          <Property Name="rezervasyonTarihi" Type="date" />
+        </EntityType>
+        <EntityType Name="şirket">
+          <Key>
+            <PropertyRef Name="sirket_ID" />
+          </Key>
+          <Property Name="sirket_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kullanici_ID" Type="int" />
+        </EntityType>
+        <Association Name="FK_kiralama_araçBilgisi">
+          <End Role="araçBilgisi" Type="Self.araçBilgisi" Multiplicity="0..1" />
+          <End Role="kiralama" Type="Self.kiralama" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="araçBilgisi">
+              <PropertyRef Name="arac_ID" />
+            </Principal>
+            <Dependent Role="kiralama">
+              <PropertyRef Name="arac_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_kiralama_müşteri">
+          <End Role="müşteri" Type="Self.müşteri" Multiplicity="0..1" />
+          <End Role="kiralama" Type="Self.kiralama" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="müşteri">
+              <PropertyRef Name="musteri_ID" />
+            </Principal>
+            <Dependent Role="kiralama">
+              <PropertyRef Name="musteri_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_kullanıcı_araçBilgisi">
+          <End Role="araçBilgisi" Type="Self.araçBilgisi" Multiplicity="0..1" />
+          <End Role="kullanıcı" Type="Self.kullanıcı" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="araçBilgisi">
+              <PropertyRef Name="arac_ID" />
+            </Principal>
+            <Dependent Role="kullanıcı">
+              <PropertyRef Name="arac_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_kullanıcı_kiralama">
+          <End Role="kiralama" Type="Self.kiralama" Multiplicity="0..1" />
+          <End Role="kullanıcı" Type="Self.kullanıcı" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kiralama">
+              <PropertyRef Name="kira_ID" />
+            </Principal>
+            <Dependent Role="kullanıcı">
+              <PropertyRef Name="kiralama_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_kullanıcı_müşteri">
+          <End Role="müşteri" Type="Self.müşteri" Multiplicity="0..1" />
+          <End Role="kullanıcı" Type="Self.kullanıcı" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="müşteri">
+              <PropertyRef Name="musteri_ID" />
+            </Principal>
+            <Dependent Role="kullanıcı">
+              <PropertyRef Name="musteri_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_kullanıcı_rezervasyon">
+          <End Role="rezervasyon" Type="Self.rezervasyon" Multiplicity="0..1" />
+          <End Role="kullanıcı" Type="Self.kullanıcı" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rezervasyon">
+              <PropertyRef Name="rezervasyon_ID" />
+            </Principal>
+            <Dependent Role="kullanıcı">
+              <PropertyRef Name="rezervasyon_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rezervasyon_araçBilgisi">
+          <End Role="araçBilgisi" Type="Self.araçBilgisi" Multiplicity="0..1" />
+          <End Role="rezervasyon" Type="Self.rezervasyon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="araçBilgisi">
+              <PropertyRef Name="arac_ID" />
+            </Principal>
+            <Dependent Role="rezervasyon">
+              <PropertyRef Name="arac_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rezervasyon_müşteri">
+          <End Role="müşteri" Type="Self.müşteri" Multiplicity="0..1" />
+          <End Role="rezervasyon" Type="Self.rezervasyon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="müşteri">
+              <PropertyRef Name="musteri_ID" />
+            </Principal>
+            <Dependent Role="rezervasyon">
+              <PropertyRef Name="musteri_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_şirket_kullanıcı">
+          <End Role="kullanıcı" Type="Self.kullanıcı" Multiplicity="0..1" />
+          <End Role="şirket" Type="Self.şirket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullanıcı">
+              <PropertyRef Name="kullanici_ID" />
+            </Principal>
+            <Dependent Role="şirket">
+              <PropertyRef Name="kullanici_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AracKiralamaModelStoreContainer">
+          <EntitySet Name="araçBilgisi" EntityType="Self.araçBilgisi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="kiralama" EntityType="Self.kiralama" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="kullanıcı" EntityType="Self.kullanıcı" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="müşteri" EntityType="Self.müşteri" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="rezervasyon" EntityType="Self.rezervasyon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="şirket" EntityType="Self.şirket" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_kiralama_araçBilgisi" Association="Self.FK_kiralama_araçBilgisi">
+            <End Role="araçBilgisi" EntitySet="araçBilgisi" />
+            <End Role="kiralama" EntitySet="kiralama" />
+          </AssociationSet>
+          <AssociationSet Name="FK_kiralama_müşteri" Association="Self.FK_kiralama_müşteri">
+            <End Role="müşteri" EntitySet="müşteri" />
+            <End Role="kiralama" EntitySet="kiralama" />
+          </AssociationSet>
+          <AssociationSet Name="FK_kullanıcı_araçBilgisi" Association="Self.FK_kullanıcı_araçBilgisi">
+            <End Role="araçBilgisi" EntitySet="araçBilgisi" />
+            <End Role="kullanıcı" EntitySet="kullanıcı" />
+          </AssociationSet>
+          <AssociationSet Name="FK_kullanıcı_kiralama" Association="Self.FK_kullanıcı_kiralama">
+            <End Role="kiralama" EntitySet="kiralama" />
+            <End Role="kullanıcı" EntitySet="kullanıcı" />
+          </AssociationSet>
+          <AssociationSet Name="FK_kullanıcı_müşteri" Association="Self.FK_kullanıcı_müşteri">
+            <End Role="müşteri" EntitySet="müşteri" />
+            <End Role="kullanıcı" EntitySet="kullanıcı" />
+          </AssociationSet>
+          <AssociationSet Name="FK_kullanıcı_rezervasyon" Association="Self.FK_kullanıcı_rezervasyon">
+            <End Role="rezervasyon" EntitySet="rezervasyon" />
+            <End Role="kullanıcı" EntitySet="kullanıcı" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rezervasyon_araçBilgisi" Association="Self.FK_rezervasyon_araçBilgisi">
+            <End Role="araçBilgisi" EntitySet="araçBilgisi" />
+            <End Role="rezervasyon" EntitySet="rezervasyon" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rezervasyon_müşteri" Association="Self.FK_rezervasyon_müşteri">
+            <End Role="müşteri" EntitySet="müşteri" />
+            <End Role="rezervasyon" EntitySet="rezervasyon" />
+          </AssociationSet>
+          <AssociationSet Name="FK_şirket_kullanıcı" Association="Self.FK_şirket_kullanıcı">
+            <End Role="kullanıcı" EntitySet="kullanıcı" />
+            <End Role="şirket" EntitySet="şirket" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AracKiralamaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="araçBilgisi">
+          <Key>
+            <PropertyRef Name="arac_ID" />
+          </Key>
+          <Property Name="arac_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="aracAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="aracModeli" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="gerekenEhliyetYasi" Type="Int32" />
+          <Property Name="aracKM" Type="Double" />
+          <Property Name="airbag" Type="Boolean" />
+          <Property Name="koltukSayisi" Type="Int32" />
+          <Property Name="günlükUcret" Type="Double" />
+          <NavigationProperty Name="kiralama" Relationship="Self.FK_kiralama_araçBilgisi" FromRole="araçBilgisi" ToRole="kiralama" />
+          <NavigationProperty Name="kullanıcı" Relationship="Self.FK_kullanıcı_araçBilgisi" FromRole="araçBilgisi" ToRole="kullanıcı" />
+          <NavigationProperty Name="rezervasyon" Relationship="Self.FK_rezervasyon_araçBilgisi" FromRole="araçBilgisi" ToRole="rezervasyon" />
+        </EntityType>
+        <EntityType Name="kiralama">
+          <Key>
+            <PropertyRef Name="kira_ID" />
+          </Key>
+          <Property Name="kira_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="arac_ID" Type="Int32" />
+          <Property Name="musteri_ID" Type="Int32" />
+          <Property Name="kiralanmaTarihi" Type="DateTime" Precision="3" />
+          <Property Name="kiraUcret" Type="Double" />
+          <Property Name="verilişKM" Type="Double" />
+          <Property Name="sonKM" Type="Double" />
+          <NavigationProperty Name="araçBilgisi" Relationship="Self.FK_kiralama_araçBilgisi" FromRole="kiralama" ToRole="araçBilgisi" />
+          <NavigationProperty Name="müşteri" Relationship="Self.FK_kiralama_müşteri" FromRole="kiralama" ToRole="müşteri" />
+          <NavigationProperty Name="kullanıcı" Relationship="Self.FK_kullanıcı_kiralama" FromRole="kiralama" ToRole="kullanıcı" />
+        </EntityType>
+        <EntityType Name="kullanıcı">
+          <Key>
+            <PropertyRef Name="kullanici_ID" />
+          </Key>
+          <Property Name="kullanici_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="arac_ID" Type="Int32" />
+          <Property Name="rezervasyon_ID" Type="Int32" />
+          <Property Name="kiralama_ID" Type="Int32" />
+          <Property Name="musteri_ID" Type="Int32" />
+          <NavigationProperty Name="araçBilgisi" Relationship="Self.FK_kullanıcı_araçBilgisi" FromRole="kullanıcı" ToRole="araçBilgisi" />
+          <NavigationProperty Name="kiralama" Relationship="Self.FK_kullanıcı_kiralama" FromRole="kullanıcı" ToRole="kiralama" />
+          <NavigationProperty Name="müşteri" Relationship="Self.FK_kullanıcı_müşteri" FromRole="kullanıcı" ToRole="müşteri" />
+          <NavigationProperty Name="rezervasyon" Relationship="Self.FK_kullanıcı_rezervasyon" FromRole="kullanıcı" ToRole="rezervasyon" />
+          <NavigationProperty Name="şirket" Relationship="Self.FK_şirket_kullanıcı" FromRole="kullanıcı" ToRole="şirket" />
+        </EntityType>
+        <EntityType Name="müşteri">
+          <Key>
+            <PropertyRef Name="musteri_ID" />
+          </Key>
+          <Property Name="musteri_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="musteriAd" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="musteriSoyad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="musteriTC" Type="Int32" />
+          <Property Name="musteriDogumTarihi" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="kiralama" Relationship="Self.FK_kiralama_müşteri" FromRole="müşteri" ToRole="kiralama" />
+          <NavigationProperty Name="kullanıcı" Relationship="Self.FK_kullanıcı_müşteri" FromRole="müşteri" ToRole="kullanıcı" />
+          <NavigationProperty Name="rezervasyon" Relationship="Self.FK_rezervasyon_müşteri" FromRole="müşteri" ToRole="rezervasyon" />
+        </EntityType>
+        <EntityType Name="rezervasyon">
+          <Key>
+            <PropertyRef Name="rezervasyon_ID" />
+          </Key>
+          <Property Name="rezervasyon_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="arac_ID" Type="Int32" />
+          <Property Name="musteri_ID" Type="Int32" />
+          <Property Name="rezervasyonTarihi" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="araçBilgisi" Relationship="Self.FK_rezervasyon_araçBilgisi" FromRole="rezervasyon" ToRole="araçBilgisi" />
+          <NavigationProperty Name="kullanıcı" Relationship="Self.FK_kullanıcı_rezervasyon" FromRole="rezervasyon" ToRole="kullanıcı" />
+          <NavigationProperty Name="müşteri" Relationship="Self.FK_rezervasyon_müşteri" FromRole="rezervasyon" ToRole="müşteri" />
+        </EntityType>
+        <EntityType Name="şirket">
+          <Key>
+            <PropertyRef Name="sirket_ID" />
+          </Key>
+          <Property Name="sirket_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kullanici_ID" Type="Int32" />
+          <NavigationProperty Name="kullanıcı" Relationship="Self.FK_şirket_kullanıcı" FromRole="şirket" ToRole="kullanıcı" />
+        </EntityType>
+        <Association Name="FK_kiralama_araçBilgisi">
+          <End Role="araçBilgisi" Type="Self.araçBilgisi" Multiplicity="0..1" />
+          <End Role="kiralama" Type="Self.kiralama" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="araçBilgisi">
+              <PropertyRef Name="arac_ID" />
+            </Principal>
+            <Dependent Role="kiralama">
+              <PropertyRef Name="arac_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_kullanıcı_araçBilgisi">
+          <End Role="araçBilgisi" Type="Self.araçBilgisi" Multiplicity="0..1" />
+          <End Role="kullanıcı" Type="Self.kullanıcı" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="araçBilgisi">
+              <PropertyRef Name="arac_ID" />
+            </Principal>
+            <Dependent Role="kullanıcı">
+              <PropertyRef Name="arac_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rezervasyon_araçBilgisi">
+          <End Role="araçBilgisi" Type="Self.araçBilgisi" Multiplicity="0..1" />
+          <End Role="rezervasyon" Type="Self.rezervasyon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="araçBilgisi">
+              <PropertyRef Name="arac_ID" />
+            </Principal>
+            <Dependent Role="rezervasyon">
+              <PropertyRef Name="arac_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_kiralama_müşteri">
+          <End Role="müşteri" Type="Self.müşteri" Multiplicity="0..1" />
+          <End Role="kiralama" Type="Self.kiralama" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="müşteri">
+              <PropertyRef Name="musteri_ID" />
+            </Principal>
+            <Dependent Role="kiralama">
+              <PropertyRef Name="musteri_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_kullanıcı_kiralama">
+          <End Role="kiralama" Type="Self.kiralama" Multiplicity="0..1" />
+          <End Role="kullanıcı" Type="Self.kullanıcı" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kiralama">
+              <PropertyRef Name="kira_ID" />
+            </Principal>
+            <Dependent Role="kullanıcı">
+              <PropertyRef Name="kiralama_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_kullanıcı_müşteri">
+          <End Role="müşteri" Type="Self.müşteri" Multiplicity="0..1" />
+          <End Role="kullanıcı" Type="Self.kullanıcı" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="müşteri">
+              <PropertyRef Name="musteri_ID" />
+            </Principal>
+            <Dependent Role="kullanıcı">
+              <PropertyRef Name="musteri_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_kullanıcı_rezervasyon">
+          <End Role="rezervasyon" Type="Self.rezervasyon" Multiplicity="0..1" />
+          <End Role="kullanıcı" Type="Self.kullanıcı" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rezervasyon">
+              <PropertyRef Name="rezervasyon_ID" />
+            </Principal>
+            <Dependent Role="kullanıcı">
+              <PropertyRef Name="rezervasyon_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_şirket_kullanıcı">
+          <End Role="kullanıcı" Type="Self.kullanıcı" Multiplicity="0..1" />
+          <End Role="şirket" Type="Self.şirket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullanıcı">
+              <PropertyRef Name="kullanici_ID" />
+            </Principal>
+            <Dependent Role="şirket">
+              <PropertyRef Name="kullanici_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rezervasyon_müşteri">
+          <End Role="müşteri" Type="Self.müşteri" Multiplicity="0..1" />
+          <End Role="rezervasyon" Type="Self.rezervasyon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="müşteri">
+              <PropertyRef Name="musteri_ID" />
+            </Principal>
+            <Dependent Role="rezervasyon">
+              <PropertyRef Name="musteri_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AracKiralamaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="araçBilgisi" EntityType="Self.araçBilgisi" />
+          <EntitySet Name="kiralama" EntityType="Self.kiralama" />
+          <EntitySet Name="kullanıcı" EntityType="Self.kullanıcı" />
+          <EntitySet Name="müşteri" EntityType="Self.müşteri" />
+          <EntitySet Name="rezervasyon" EntityType="Self.rezervasyon" />
+          <EntitySet Name="şirket" EntityType="Self.şirket" />
+          <AssociationSet Name="FK_kiralama_araçBilgisi" Association="Self.FK_kiralama_araçBilgisi">
+            <End Role="araçBilgisi" EntitySet="araçBilgisi" />
+            <End Role="kiralama" EntitySet="kiralama" />
+          </AssociationSet>
+          <AssociationSet Name="FK_kullanıcı_araçBilgisi" Association="Self.FK_kullanıcı_araçBilgisi">
+            <End Role="araçBilgisi" EntitySet="araçBilgisi" />
+            <End Role="kullanıcı" EntitySet="kullanıcı" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rezervasyon_araçBilgisi" Association="Self.FK_rezervasyon_araçBilgisi">
+            <End Role="araçBilgisi" EntitySet="araçBilgisi" />
+            <End Role="rezervasyon" EntitySet="rezervasyon" />
+          </AssociationSet>
+          <AssociationSet Name="FK_kiralama_müşteri" Association="Self.FK_kiralama_müşteri">
+            <End Role="müşteri" EntitySet="müşteri" />
+            <End Role="kiralama" EntitySet="kiralama" />
+          </AssociationSet>
+          <AssociationSet Name="FK_kullanıcı_kiralama" Association="Self.FK_kullanıcı_kiralama">
+            <End Role="kiralama" EntitySet="kiralama" />
+            <End Role="kullanıcı" EntitySet="kullanıcı" />
+          </AssociationSet>
+          <AssociationSet Name="FK_kullanıcı_müşteri" Association="Self.FK_kullanıcı_müşteri">
+            <End Role="müşteri" EntitySet="müşteri" />
+            <End Role="kullanıcı" EntitySet="kullanıcı" />
+          </AssociationSet>
+          <AssociationSet Name="FK_kullanıcı_rezervasyon" Association="Self.FK_kullanıcı_rezervasyon">
+            <End Role="rezervasyon" EntitySet="rezervasyon" />
+            <End Role="kullanıcı" EntitySet="kullanıcı" />
+          </AssociationSet>
+          <AssociationSet Name="FK_şirket_kullanıcı" Association="Self.FK_şirket_kullanıcı">
+            <End Role="kullanıcı" EntitySet="kullanıcı" />
+            <End Role="şirket" EntitySet="şirket" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rezervasyon_müşteri" Association="Self.FK_rezervasyon_müşteri">
+            <End Role="müşteri" EntitySet="müşteri" />
+            <End Role="rezervasyon" EntitySet="rezervasyon" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AracKiralamaModelStoreContainer" CdmEntityContainer="AracKiralamaEntities">
+          <EntitySetMapping Name="araçBilgisi">
+            <EntityTypeMapping TypeName="AracKiralamaModel.araçBilgisi">
+              <MappingFragment StoreEntitySet="araçBilgisi">
+                <ScalarProperty Name="arac_ID" ColumnName="arac_ID" />
+                <ScalarProperty Name="aracAdi" ColumnName="aracAdi" />
+                <ScalarProperty Name="aracModeli" ColumnName="aracModeli" />
+                <ScalarProperty Name="gerekenEhliyetYasi" ColumnName="gerekenEhliyetYasi" />
+                <ScalarProperty Name="aracKM" ColumnName="aracKM" />
+                <ScalarProperty Name="airbag" ColumnName="airbag" />
+                <ScalarProperty Name="koltukSayisi" ColumnName="koltukSayisi" />
+                <ScalarProperty Name="günlükUcret" ColumnName="günlükUcret" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="kiralama">
+            <EntityTypeMapping TypeName="AracKiralamaModel.kiralama">
+              <MappingFragment StoreEntitySet="kiralama">
+                <ScalarProperty Name="kira_ID" ColumnName="kira_ID" />
+                <ScalarProperty Name="arac_ID" ColumnName="arac_ID" />
+                <ScalarProperty Name="musteri_ID" ColumnName="musteri_ID" />
+                <ScalarProperty Name="kiralanmaTarihi" ColumnName="kiralanmaTarihi" />
+                <ScalarProperty Name="kiraUcret" ColumnName="kiraUcret" />
+                <ScalarProperty Name="verilişKM" ColumnName="verilişKM" />
+                <ScalarProperty Name="sonKM" ColumnName="sonKM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="kullanıcı">
+            <EntityTypeMapping TypeName="AracKiralamaModel.kullanıcı">
+              <MappingFragment StoreEntitySet="kullanıcı">
+                <ScalarProperty Name="kullanici_ID" ColumnName="kullanici_ID" />
+                <ScalarProperty Name="arac_ID" ColumnName="arac_ID" />
+                <ScalarProperty Name="rezervasyon_ID" ColumnName="rezervasyon_ID" />
+                <ScalarProperty Name="kiralama_ID" ColumnName="kiralama_ID" />
+                <ScalarProperty Name="musteri_ID" ColumnName="musteri_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="müşteri">
+            <EntityTypeMapping TypeName="AracKiralamaModel.müşteri">
+              <MappingFragment StoreEntitySet="müşteri">
+                <ScalarProperty Name="musteri_ID" ColumnName="musteri_ID" />
+                <ScalarProperty Name="musteriAd" ColumnName="musteriAd" />
+                <ScalarProperty Name="musteriSoyad" ColumnName="musteriSoyad" />
+                <ScalarProperty Name="musteriTC" ColumnName="musteriTC" />
+                <ScalarProperty Name="musteriDogumTarihi" ColumnName="musteriDogumTarihi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rezervasyon">
+            <EntityTypeMapping TypeName="AracKiralamaModel.rezervasyon">
+              <MappingFragment StoreEntitySet="rezervasyon">
+                <ScalarProperty Name="rezervasyon_ID" ColumnName="rezervasyon_ID" />
+                <ScalarProperty Name="arac_ID" ColumnName="arac_ID" />
+                <ScalarProperty Name="musteri_ID" ColumnName="musteri_ID" />
+                <ScalarProperty Name="rezervasyonTarihi" ColumnName="rezervasyonTarihi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="şirket">
+            <EntityTypeMapping TypeName="AracKiralamaModel.şirket">
+              <MappingFragment StoreEntitySet="şirket">
+                <ScalarProperty Name="sirket_ID" ColumnName="sirket_ID" />
+                <ScalarProperty Name="kullanici_ID" ColumnName="kullanici_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
